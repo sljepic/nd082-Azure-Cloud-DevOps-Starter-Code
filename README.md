@@ -83,5 +83,5 @@ When a Packer template is created, you can use following command to build a serv
 ### Output
 
 <h4> Policy </h4>
-When a policy is created and deployed and **az policy assignment list**, a [proper output should be present](https://github.com/sljepic/nd082-Azure-Cloud-DevOps-Starter-Code/blob/udacity_project_1/policy.png) with all necessary information about created tagging policy. 
+When a policy is created and deployed and **az policy assignment list**, a [proper output should be present](https://github.com/sljepic/nd082-Azure-Cloud-DevOps-Starter-Code/blob/udacity_project_1/policy.PNG) with all necessary information about created tagging policy. 
 
