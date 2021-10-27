@@ -56,14 +56,14 @@ To verify that new policy has been deployed use following command:
 
     For the purpouse of this project, a policy that ensures all indexed resources have tags is created. If that condition is not fulfilled, creation of a specific resource without a tag should be forbiden.  
 
-3. Create an server image using Packer template:
+3. **Create an server image** using Packer template:
 **server.json** template file contains Packer configuration that is used to generate an server image. In this file you should provide your Azure subscription_id that can be found under Subscriptions tab on Azure portal. In this case, this variable is exported as a environment variable. Also, a os type, image publisher, sku, virtual machine size, location and resource group are defined in a Packer template. This values are configurabile and if we want to change them, changes should be done inside of a server.json file. A simple web application is provided within a provisioners block.  
 When a Packer template is created, you can use following command to build a server image:  
 * **packer build <path_to_server_json_file>**
 
     After the command is executed, server image will be created in a specified ressource group.
 
-4. Create an Terraform template to build and deploy infrastructure:  
+4. **Create an Terraform template** to build and deploy infrastructure:  
     In main.tf file, a code needed for the infrastructure setup is located. Firstly, it is important to specify resource group. A resource group with a exactly same name must be created in a Azure portal. Next steps are to create a appropriate virtual networks and subnets associated with a created resource group.
     After that, a security group with several security rules is defined. Created security rules are used to deny outbound internet connection between internet and virtual machines and to allow outbound and inbound internet access between virtual machines or to allow a access from load balancer to virtual machines. Moreover, a network interfaces are created along with public IP addresses. To provide high availability by distributing incoming traffic amoung virtual machines, a Loadbalancer is created with a backend address pool and address pool association for the network interface and loadbalancer. To create a virtual machines, azurerm_linux_virtual_machine is used. Using a source_image_id parameter, a server image created in a previous step using Packer is linked. Finally, managed disks and availability sets are created. All variables are declared and defined inside of variables.tf file. First variable is a prefix variable, that enables us to create a arbitrarily names for resources that will be created. Besides that, it is possible to change a server location, packer image name and number of resources. Each of the variables has a default value and number_of_resources variable has a limitation that allows only values between two and five to be used. A value for each of the attributes can be modified in variables.tf file, when default attribute value is changed. To deploy a terraform configuration, firstly we need to create a resource group named "<prefix>_resource_group", where prefix variable is defined inside of variables.tf file.
     This group needs to be imported so that it can be referenced while deploying. To do so, use a following command:  
@@ -73,11 +73,15 @@ When a Packer template is created, you can use following command to build a serv
     command that creates an execution plan. That execution plan is saved on a specified path when -out flag is used.  
     After a execution plan is created, we use a command:  
 * **terraform apply**  
-    to deploy a code.
+    to deploy a code.  
+    Finally, when resources are created, we should use:
 
+* **terraform destroy**  
+    to remove all remote objects managed by provided configuration.
 
 
 ### Output
 
-Several outputs are 
+<h4> Policy </h4>
+When a policy is created and deployed and **az policy assignment list**, a [proper output should be present](https://github.com/sljepic/nd082-Azure-Cloud-DevOps-Starter-Code/blob/udacity_project_1/policy.png) with all necessary information about created tagging policy. 
 
