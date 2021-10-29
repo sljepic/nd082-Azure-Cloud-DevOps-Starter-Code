@@ -5,7 +5,7 @@ For this project, you will write a Packer template and a Terraform template to d
 
 ### Project overview: 
 In this project a simple web Server was deployed on a Azure cloud. Project was done in four steps:
-1. A policy that ensures all indexed resourcecs are tagged was created and deployed with the name "tagging-policy"
+1. A policy that ensures all indexed resources are tagged was created and deployed with the name "tagging-policy"
 
 2. A Packer template that creates a server image that anyone can use is created. 
 
@@ -64,7 +64,9 @@ When a Packer template is created, you can use following command to build a serv
     After the command is executed, server image will be created in a specified ressource group.
 
 4. **Create an Terraform template** to build and deploy infrastructure:  
-    In main.tf file, a code needed for the infrastructure setup is located. Firstly, it is important to specify resource group. A resource group with a exactly same name must be created in a Azure portal. Next steps are to create a appropriate virtual networks and subnets associated with a created resource group.
+    In main.tf file, a code needed for the infrastructure setup is located. Firstly, it is important to specify resource group. A resource group with a exactly same name must be created in a Azure. To create a resource group use following command:  
+* **az group create --location westeurope --resource-group udacity_resource_group --tags resource_group_tag="udacity_rg"**  
+    Next steps are to create a appropriate virtual networks and subnets associated with a created resource group.
     After that, a security group with several security rules is defined. Created security rules are used to deny outbound internet connection between internet and virtual machines and to allow outbound and inbound internet access between virtual machines or to allow a access from load balancer to virtual machines. Moreover, a network interfaces are created along with public IP addresses. To provide high availability by distributing incoming traffic amoung virtual machines, a Loadbalancer is created with a backend address pool and address pool association for the network interface and loadbalancer. To create a virtual machines, azurerm_linux_virtual_machine is used. Using a source_image_id parameter, a server image created in a previous step using Packer is linked. Finally, managed disks and availability sets are created. All variables are declared and defined inside of variables.tf file. First variable is a prefix variable, that enables us to create a arbitrarily names for resources that will be created. Besides that, it is possible to change a server location, packer image name and number of resources. Each of the variables has a default value and number_of_resources variable has a limitation that allows only values between two and five to be used. A value for each of the attributes can be modified in variables.tf file, when default attribute value is changed. To deploy a terraform configuration, firstly we need to create a resource group named "<prefix>_resource_group", where prefix variable is defined inside of variables.tf file.
     This group needs to be imported so that it can be referenced while deploying. To do so, use a following command:  
 * **terraform import azurerm_resource_group.main /subscriptions/<subscription_id>/resourceGroups/<resource_group_name>**
@@ -82,6 +84,13 @@ When a Packer template is created, you can use following command to build a serv
 
 ### Output
 
-<h4> Policy </h4>
+**<h3> Policy </h3>**  
+
 When a policy is created and deployed and **az policy assignment list**, a [proper output should be present](https://github.com/sljepic/nd082-Azure-Cloud-DevOps-Starter-Code/blob/udacity_project_1/policy.PNG) with all necessary information about created tagging policy. 
+
+**<h3> Packer </h3>** 
+
+After a Packer configuration is created and build command is executed, [a newly created image should appear within a specified resource group](https://github.com/sljepic/nd082-Azure-Cloud-DevOps-Starter-Code/blob/udacity_project_1/Packer_image.PNG) with specified location
+
+**<h3> Terraform </h3>**
 
